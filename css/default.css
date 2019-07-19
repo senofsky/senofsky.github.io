@@ -32,7 +32,7 @@ div.logo a {
     float: left;
     font-family: 'Raleway', 'Open Sans', sans-serif;
     font-size: 28px;
-    font-weight: bold;
+    font-weight: lighter;
     text-decoration: none;
 }
 
@@ -44,7 +44,7 @@ header nav a {
     color: #cb151e!important;
     font-family: 'Raleway', 'Open Sans', sans-serif;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: lighter;
     margin-left: 12px;
     text-decoration: none;
     text-transform: uppercase;
@@ -64,16 +64,19 @@ main h1{
   color: #cb151e;
   font-size: 36px;
   font-family: 'Raleway', 'Open Sans', sans-serif;
+  font-weight: lighter;
 }
 
 main h2{
   color: #cb151e;
+  font-weight: lighter;
 }
 
 main, /* this line for archives page */
 main p{
     color: #333333;
     font-family: 'Raleway', 'Open Sans', sans-serif;
+    font-weight: lighter;
     font-size: 15px;
 }
 
