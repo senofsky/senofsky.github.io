@@ -1,7 +1,7 @@
 @import "base.css";
 
 /* fonts */
-@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+@import url(http://fonts.googleapis.com/css?family=Raleway);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 html {
@@ -21,13 +21,16 @@ body {
 header {
     margin-bottom: 0px;
     padding: 50px;
-    background: linear-gradient(to right,#19111f 0%,#2c1e37 100%);
+    background: #FFFFFF;
+    border-bottom-style: solid;
+    border-color: #cb151e;
+    border-width: 1px;
 }
 
 div.logo a {
-    color: #FFFFFF;
+    color: #cb151e;
     float: left;
-    font-family: Ubuntu, 'Open Sans', sans-serif;
+    font-family: 'Raleway', 'Open Sans', sans-serif;
     font-size: 28px;
     font-weight: bold;
     text-decoration: none;
@@ -38,8 +41,8 @@ header nav {
 }
 
 header nav a {
-    color: #d1cddc!important;
-    font-family: 'Open Sans', sans-serif;
+    color: #cb151e!important;
+    font-family: 'Raleway', 'Open Sans', sans-serif;
     font-size: 14px;
     font-weight: bold;
     margin-left: 12px;
@@ -48,7 +51,7 @@ header nav a {
 }
 
 header nav a:hover{
-  color: #FFFFFF;
+  color: #cb151e;
 }
 
 main {
@@ -58,15 +61,19 @@ main {
 }
 
 main h1{
-  color: #6e618d;
+  color: #cb151e;
   font-size: 36px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+main h2{
+  color: #cb151e;
 }
 
 main, /* this line for archives page */
 main p{
     color: #333333;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Raleway', 'Open Sans', sans-serif;
     font-size: 15px;
 }
 
@@ -76,21 +83,24 @@ main a{
 }
 
 footer {
-    color: #999999;
+    color: #000000;
     font-size: 12px;
     text-align: center;
     height: 4em;
-    background-color: #323232;
+    background-color: #FFFFFF;
     position: absolute;
     bottom: 0;
     width: 100%;
     overflow: hidden;
     padding-top: 1em;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Raleway', 'Open Sans', sans-serif;
+    border-top-style: solid;
+    border-width: 1px;
+    border-color: #cb151e;
 }
 
 footer a {
-  color: #ffffff;
+  color: #cb151e;
   font-weight: bold;
   text-decoration: none;
 }
