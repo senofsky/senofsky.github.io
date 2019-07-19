@@ -77,14 +77,14 @@ main h2{
 
 main, /* this line for archives page */
 main p{
-    color: #333333;
+    color: #000000;
     font-family: 'Raleway', 'Open Sans', sans-serif;
     font-weight: lighter;
     font-size: 15px;
 }
 
 main a{
-  color: #428bca;
+  color: #cb151e;
   text-decoration: none;
 }
 
