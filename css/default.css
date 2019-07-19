@@ -21,6 +21,7 @@ body {
 header {
     margin-bottom: 0px;
     padding: 50px;
+    padding-bottom: 20px;
     background: #FFFFFF;
     border-bottom-style: solid;
     border-color: #cb151e;
@@ -31,21 +32,22 @@ div.logo a {
     color: #cb151e;
     float: left;
     font-family: 'Raleway', 'Open Sans', sans-serif;
-    font-size: 28px;
+    font-size: 60px;
     font-weight: lighter;
     text-decoration: none;
 }
 
 header nav {
     text-align: right;
+    padding-top: 36px;
 }
 
 header nav a {
     color: #cb151e!important;
     font-family: 'Raleway', 'Open Sans', sans-serif;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: lighter;
-    margin-left: 12px;
+    margin-left: 30px;
     text-decoration: none;
     text-transform: uppercase;
 }
