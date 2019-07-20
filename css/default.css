@@ -75,6 +75,16 @@ main h2{
   font-weight: lighter;
 }
 
+main h3{
+  color: #cb151e;
+  font-weight: lighter;
+}
+
+main h4{
+  color: #cb151e;
+  font-weight: lighter;
+}
+
 main, /* this line for archives page */
 main p{
     color: #000000;
@@ -117,3 +127,8 @@ section.header {
     font-style: italic;
 }
 
+hr {
+  border: 0;
+  background-color: #cb151e;
+  height: 1px;
+}
