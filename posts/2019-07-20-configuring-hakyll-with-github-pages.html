@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+    <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144233581-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-144233581-1');
+        </script>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SENOFSKY - Configuring Hakyll with GitHub Pages the Easy Way</title>
+        <link rel="stylesheet" href="../css/default.css" />
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">SENOFSKY</a>
+            </div>
+            <nav>
+                <a href="../">HOME</a>
+                <a href="../about.html">ABOUT</a>
+                <a href="../resume.html">RESUME</a>
+                <a href="../archive.html">ARCHIVE</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>Configuring Hakyll with GitHub Pages the Easy Way</h1>
+            <article>
+    <section class="header">
+        Posted on July 20, 2019
+        
+    </section>
+    <section>
+        <h2 id="overview">Overview</h2>
+<p>After looking over a few tutorials on setting up Hakyll with GitHub Pages, I noticed that they weren’t beginner-friendly. Therefore, the intent of this post is to guide the reader through setting up Hakyll with GitHub Pages in an easy-to-understand manner.</p>
+<p>The official Hakyll <a href="https://jaspervdj.be/hakyll/">website</a> has a tutorial for setting up GitHub Pages <a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">here</a>. However, at the time of this posting, there are details that were left out that cause arcane errors. I will rectify the errors in this tutorial.</p>
+<h2 id="setting-up-the-repo">Setting up the repo</h2>
+<p>GitHub Pages does not work out of the box with Hakyll. This is because GitHub Pages expects the site content to be in the root directory of the repository, while Hakyll puts the site content in the <code>_site/</code> subdirectory. To solve this problem, we will have two separate branches: <code>dev</code> and <code>master</code>. Github Pages requires the web content to be in <code>master</code>. The <code>dev</code> branch is where we will be developing the website. The workflow looks like this:</p>
+<ol type="1">
+<li>checkout <code>dev</code></li>
+<li>edit the website</li>
+<li>build the website (this creates the <code>_site/</code> directory)</li>
+<li>checkout <code>master</code></li>
+<li>copy the contents of <code>_site/</code> into the project root directory.</li>
+<li>commit and push the changes to <code>master</code> (your GitHub Page will display the contents)</li>
+</ol>
+<p>To set up the repo for GitHub Pages, create a repository with your username concatanated with <code>.github.io</code>. Since my username is <code>senofsky</code>, my GitHub Pages site is located at <code>senofsky.github.io</code>. Once the repository is created, create a <code>.gitignore</code> file with the following contents:</p>
+<pre><code>.stack-work/
+_cache/
+_site/</code></pre>
+<h2 id="install-hakyll">Install Hakyll</h2>
+<p>The next step is to install Hakyll. At the time of the posting, the standard <code>stack install hakyll</code> generates a dependency error. Instead, use:</p>
+<pre><code>stack install hakyll --resolve lts-12.26</code></pre>
+<p>The error and workaround are documented <a href="https://github.com/jaspervdj/hakyll/issues/684">here</a>.</p>
+<h2 id="create-the-site">Create the site</h2>
+<p>Once Hakyll is installed, create your site and name it after your GitHub Pages repo for ease of use:</p>
+<pre><code>stack exec hakyll-init username.github.io</code></pre>
+<p>Do <strong>NOT</strong> use the Hakyll template given in <a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">Using Hakyll with GitHub Pages</a> post. At the time of this posting, the Hakyll template given in that tutorial uses outdated HTML tags that will fail when adding up-to-date themes from sites such as <a href="http://katychuang.com/hakyll-cssgarden/">Hakyll CSS Garden</a>.</p>
+<p>In the newly created website directory, execute:</p>
+<pre><code>git init
+git remote add origin &lt;URL to your GitHub pages repository&gt;
+git pull
+git checkout -b dev
+git add --all
+git commit -m &quot;first posting&quot;
+git push</code></pre>
+<h2 id="deploying-the-site">Deploying the site</h2>
+<p>To build the site, you must first execute:</p>
+<pre><code>stack init
+stack build
+stack exec site build</code></pre>
+<p>At this point, you can view a local copy of your site by executing:</p>
+<pre><code>stack exec site watch</code></pre>
+<p>and navigating to <a href="http://localhost:8000/" class="uri">http://localhost:8000/</a>.</p>
+<p>If you make changes to the website’s HTML or markdown files, be sure to rebuild the site by executing</p>
+<pre><code>stack exec site clean
+stack exec site build</code></pre>
+<p>or</p>
+<pre><code>stack exec site rebuild</code></pre>
+<p>If you make changes to the <code>site.hs</code> file itself, you must rebuild the site binary itself by executing:</p>
+<pre><code>stack build</code></pre>
+<p>Now to publish the website, execute:</p>
+<pre><code>stack exec site build</code></pre>
+<p>to generate the <code>_site</code> directory. Next, check out the <code>master</code> branch, extract the <code>_site</code> contents, commit the changes, and push to origin.</p>
+<pre><code>git checkout master
+cp -a _site/. .
+git commit -m &quot;published first draft&quot;
+git push</code></pre>
+<p>You can then visit your site at username.github.io. The site may take up up to 10 minutes to update so patience is required.</p>
+<h2 id="adding-a-new-theme">Adding a new theme</h2>
+<p>Dr. Kat Chuang developed <a href="http://katychuang.com/hakyll-cssgarden/">Hakyll CSS Garden</a>, an awesome site that provides various themes for Hakyll. Her themes work with the default Hakyll template, so they’re easy to use. Simply replace <code>css/default.css</code> with the css file of the desired theme (be sure to rename it to <code>default.css</code>).</p>
+<h2 id="final-words">Final words</h2>
+<p>I wanted this tutorial to get the reader’s GitHub Page running in a quick and easy manner. I would strongly encourage the reader the visit the official Hakyll <a href="https://jaspervdj.be/hakyll/">website</a> to learn how to customize their site.</p>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>
