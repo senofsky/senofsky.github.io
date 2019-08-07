@@ -58,9 +58,12 @@ header nav a:hover{
 }
 
 main {
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 5.5rem; /* footer-height + 1.5rem */
+  padding: 40px 0;
+  max-width: 780px;
+  line-height: 1.5em;
 }
 
 main h1{

@@ -1,5 +1,5 @@
 ---
-title: Configuring Hakyll with GitHub Pages the Easy Way
+title: Configure Hakyll with GitHub Pages the Easy Way
 ---
 
 ## Overview
