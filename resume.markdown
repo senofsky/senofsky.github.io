@@ -58,9 +58,9 @@ TS
 * Developed systems engineering documentation to be delivered to customers
 
 ### Personal
-#### Guest Lecturer
-* Gave lectures on Hardware Reverse Engineering for Digital Forensic Analysis II over multiple semesters
-* Gave lectures on various security topics at the Computer Security Association related to OpenSSH,<br>
+#### Speaking Engagements
+* Hardware Reverse Engineering for Digital Forensic Analysis II over multiple semesters
+* Various security topics at the Computer Security Association related to OpenSSH,<br>
   securing Linux systems, Pentration Testing, Reverse Engineering, and Capture-the-Flag (CTF) competitions
 
 ---
