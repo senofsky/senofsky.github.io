@@ -1,7 +1,8 @@
 @import "base.css";
 
 /* fonts */
-@import url(https://fonts.googleapis.com/css?family=Raleway);
+@import 'https://cdn.rawgit.com/h-ibaldo/Raleway_Fixed_Numerals/master/css/rawline.css';
+/* @import url(https://fonts.googleapis.com/css?family=Raleway); */
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 html {
@@ -32,9 +33,9 @@ header {
 div.logo a {
     color: #cb151e;
     float: left;
-    font-family: 'Raleway', 'Open Sans', sans-serif;
+    font-family: 'rawline', 'Open Sans', sans-serif;
     font-size: 60px;
-    font-weight: lighter;
+    font-weight: 400;
     text-decoration: none;
 }
 
@@ -45,9 +46,9 @@ header nav {
 
 header nav a {
     color: #cb151e!important;
-    font-family: 'Raleway', 'Open Sans', sans-serif;
+    font-family: 'rawline', 'Open Sans', sans-serif;
     font-size: 20px;
-    font-weight: lighter;
+    font-weight: 400;
     margin-left: 30px;
     text-decoration: none;
     text-transform: uppercase;
@@ -69,31 +70,31 @@ main {
 main h1{
   color: #cb151e;
   font-size: 36px;
-  font-family: 'Raleway', 'Open Sans', sans-serif;
-  font-weight: lighter;
+  font-family: 'rawline', 'Open Sans', sans-serif;
+  font-weight: 400;
   line-height: 1em;
 }
 
 main h2{
   color: #cb151e;
-  font-weight: lighter;
+  font-weight: 400;
 }
 
 main h3{
   color: #cb151e;
-  font-weight: lighter;
+  font-weight: 400;
 }
 
 main h4{
   color: #cb151e;
-  font-weight: lighter;
+  font-weight: 400;
 }
 
 main, /* this line for archives page */
 main p{
     color: #000000;
-    font-family: 'Raleway', 'Open Sans', sans-serif;
-    font-weight: lighter;
+    font-family: 'rawline', 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 18px;
 }
 
@@ -113,7 +114,7 @@ footer {
     width: 100%;
     overflow: hidden;
     padding-top: 1em;
-    font-family: 'Raleway', 'Open Sans', sans-serif;
+    font-family: 'rawline', 'Open Sans', sans-serif;
     border-top-style: solid;
     border-width: 1px;
     border-color: #cb151e;
