@@ -149,3 +149,10 @@ code {
   padding-left: 4px;
   padding-right: 4px;
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
