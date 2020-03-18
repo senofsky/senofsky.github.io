@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+    <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144233581-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-144233581-1');
+        </script>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SENOFSKY - The Standardized Ladder of Functional Programming - Novice, Part 1</title>
+        <link rel="stylesheet" href="../css/default.css" />
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">SENOFSKY</a>
+            </div>
+            <nav>
+                <a href="../">HOME</a>
+                <a href="../about.html">ABOUT</a>
+                <a href="../resume.pdf">RESUME</a>
+                <a href="../archive.html">ARCHIVE</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>The Standardized Ladder of Functional Programming - Novice, Part 1</h1>
+            <article>
+    <section class="header">
+        Posted on August 20, 2019
+        
+    </section>
+    <section>
+        <p>What is the skillset of an expert functional programmer?</p>
+<p>According to the “Standardized Ladder of Functional Programming”, a graphic I found on Reddit, there is a standardized progression of different concepts and skills that a developer must master to be considered an expert in functional programming:</p>
+<p><a href="../images/functional_ladder.jpg"> <img src="../images/functional_ladder.jpg" alt="Ladder of Functional Programming" class="center" width="415" height="642"> </a></p>
+<p>Whether or not this is true is debatable at best; many people criticized this graphic as being non-realistic. However, the ladder does pick interesting topics and puts them in a relatively increasing order of complexity, so I thought it would be fun to do a series on reviewing the concepts and skills for each level. I won’t do a deep dive because topics are easily found with a quick google search, but I will give a brief review on each concept.</p>
+<p>This is part 1 of the series, so I will be covering the “Novice” portion of the graphic.</p>
+<h2 id="immutable-data">Immutable Data</h2>
+<p>In general, immutable data is data that cannot be changed. Once data is bound to a variable, the data cannot be modified.</p>
+<p>For example, variables in Python are mutable, so once we assign a value to a variable, we can mutate it:</p>
+<pre><code># immutable_data.py
+
+if __name__ == '__main__':
+    x = [1, 2, 3]
+    print(x) # prints &quot;[1, 2, 3]&quot;
+
+    x.reverse()
+    print(x) # prints &quot;[3, 2, 1]&quot;</code></pre>
+<p>As we can see, the variable <code>x</code> has been modified.</p>
+<p>In Haskell, variables are immutable. In the following example, reversing the list does <strong>NOT</strong> modify the variable <code>x</code>:</p>
+<pre><code>-- immutable_data.hs
+
+main = do
+
+    let x = [1, 2, 3]
+    putStrLn $ show x -- prints &quot;[1, 2, 3]&quot; 
+    
+    putStrLn $ show $ reverse x -- prints &quot;[3, 2, 1]&quot;
+    putStrLn $ show x -- prints &quot;[1, 2, 3]&quot;
+</code></pre>
+<p>There are a few benefits of making data immutable:</p>
+<ul>
+<li>Variables can’t change values, consequently removing the mental task of tracking a variable’s state.</li>
+<li>Variables are inherently thread-safe since they cannot be modified by various threads.</li>
+</ul>
+<p>Both of these benefits contribute to code that is easier to read and comprehend.</p>
+<p>Conversely, a negative aspect of immutability is that it’s more memory-inefficient; if data does need to be modified, a clone of the object has to be created in memory (with modifications applied) as opposed to having the same object being modified.</p>
+<p>In languages like Rust and OCaml, variables are immutable by default and must be explicitly marked to be made mutable. This allows those languages to take advantage of both immutable and mutable data types.</p>
+<p>For a more concrete example, a program may need to manipulate a large array of data. It is not ideal to make a new copy of the array every time it is modified. Therefore, marking the array as mutable can take advantage of improved speed and memory efficiency, while other data in the program utilize the advantages of immutability:</p>
+<pre><code>// immutable_data.rs
+
+fn main() {
+    let mut list = [1, 2, 3];
+    println!(&quot;{:?}&quot;, list); // prints &quot;[1, 2, 3]&quot;
+
+    for number in &amp;mut list {
+        *number += 1;
+    }
+
+    println!(&quot;{:?}&quot;, list); // prints &quot;[2, 3, 4]&quot;
+}</code></pre>
+<p>If were were to not include the <code>mut</code> and <code>&amp;mut</code> keywords:</p>
+<pre><code>// immutable_data_fail.rs
+
+fn main() {
+    let list = [1, 2, 3];
+    println!(&quot;{:?}&quot;, list);
+    
+    for number in &amp;list {
+        *number += 1;
+    }
+    
+    println!(&quot;{:?}&quot;, list);
+}</code></pre>
+<p>The program would fail during compilation with an error being raised due to not being able to modify <code>number</code> because it is &quot;behind a <code>&amp;</code> reference`, which are immutable by default:</p>
+<pre><code>$ rustc immutable_data_fail.rs 
+error[E0594]: cannot assign to `*number` which is behind a `&amp;` reference
+ --&gt; immutable_data_fail.rs:8:9
+  |
+7 |     for number in &amp;list {
+  |                   ----- help: consider changing this to be a mutable reference: `&amp;mut list`
+8 |         *number += 1;
+  |         ^^^^^^^^^^^^ `number` is a `&amp;` reference, so the data it refers to cannot be written
+
+error: aborting due to previous error</code></pre>
+<h2 id="second-order-functions">Second-Order Functions</h2>
+<p>A second-order function is a function that either:</p>
+<ol type="1">
+<li>takes another function as input</li>
+<li>returns a function as its result</li>
+</ol>
+<p>In general, a second-order function is categorized as a higher-order function. A function that is not a higher-order function is a first-order function and does not take a function as input or return a function.</p>
+<p>A common pattern in software are list transformations, where a function is applied to each element in a list. To illustrate, this is a list transformation in Python using an imperative programming approach:</p>
+<pre><code># second_order_functions.py
+
+def add_one(number):
+    return number + 1
+
+if __name__ == '__main__':
+
+    list = [1, 2, 3]
+    new_list = []
+
+    for number in list:
+        new_number = add_one(number)
+        new_list.append(new_number)
+
+    print(number) # prints &quot;[1, 2, 3]&quot;
+    print(new_number) # prints &quot;[2, 3, 4]&quot;</code></pre>
+<p>However, in a functional language like Haskell, a second-order function such as <code>map</code>, which has parameters <code>function</code> and <code>list</code>, can be used to directly apply a function to each element in the list:</p>
+<pre><code>-- second_order_functions.hs
+
+add_one :: Int -&gt; Int
+add_one number = number + 1
+
+main = do
+
+    let list = [1, 2, 3] 
+    let new_list = map add_one list
+
+    putStrLn $ show list
+    putStrLn $ show new_list
+</code></pre>
+<p>Where <code>map</code> literally maps (from a mathematical perspective) one list to another via the function. This allows a programmer to think in terms of list transformations and also reduce the multiline for-loop structure into a one line expression. This arguably reduces complexity during development, leading to improved comprehensibility of the code.</p>
+<h2 id="constructing-and-destructuring">Constructing and Destructuring</h2>
+<p>Constructing is a technique for building objects while destructuring is technique for extracting data from those objects.</p>
+<p>The following Haskell example uses <strong>record syntax</strong>, where the data type <code>Person</code> is created with the fields <code>firstName</code>, <code>lastName</code>, and <code>age</code>. This autogenerates functions <code>firstName</code>, <code>lastName,</code> and <code>age</code>, which can be used to access the respective data from a <code>Person</code> object:</p>
+<pre><code>-- constructing_and_destructuring_1.hs
+
+data Person = Person
+    { firstName :: String                                
+    , lastName  :: String            
+    , age       :: Int 
+    }    
+
+main = do
+
+    let person = Person &quot;James&quot; &quot;Kurt&quot; 25
+
+    putStrLn $ firstName person -- prints &quot;James&quot;
+    putStrLn $ lastName  person -- prints &quot;Kurt&quot;
+    putStrLn $ show $ age person -- prints &quot;25&quot;</code></pre>
+<p>The same concepts apply to lists and tuples. There are various ways to construct and destructure these types:</p>
+<pre><code>-- constructing_and_destructuring_2.hs
+
+main = do
+
+    let list1 = 1 : 2 : 3 : []
+    let list2 = [1..10]
+
+    putStrLn $ show $ head list1 -- prints &quot;1&quot;
+    putStrLn $ show $ tail list1 -- prints &quot;[2, 3]&quot;
+
+    let tuple = (1, 2)
+    putStrLn $ show $ fst tuple -- prints &quot;1&quot;
+    putStrLn $ show $ snd tuple -- prints &quot;2&quot;
+</code></pre>
+<p>Here is a similar example in Rust that uses different destructuring tactics than Haskell:</p>
+<pre><code>// constructing_and_destructuring.rs
+
+struct Person {
+    first_name: String,
+    last_name: String,
+    age: u8
+}
+
+fn main() {
+
+    let person = Person {
+        first_name: &quot;James&quot;.to_string(),
+        last_name: &quot;Kurt&quot;.to_string(),
+        age: 25
+    };
+
+    println!(&quot;{:?}&quot;, person.first_name); // prints &quot;James&quot;
+    println!(&quot;{:?}&quot;, person.last_name); // prints &quot;Kurt&quot;
+    println!(&quot;{:?}&quot;, person.age); // prints &quot;25&quot;
+
+    match person {
+
+        Person {
+            first_name: a,
+            last_name: b,
+            age: c
+        } =&gt; println!(&quot;{} {} {}&quot;, a, b, c) // prints &quot;James Kurt 25&quot;
+    }
+
+    let tuple = (1, 2);
+
+    println!(&quot;{:?}&quot;, tuple.0); // prints &quot;1&quot;
+    println!(&quot;{:?}&quot;, tuple.1); // prints &quot;2&quot;
+
+    let (first, second) = tuple;
+
+    println!(&quot;{:?}&quot;, first); // prints &quot;1&quot;
+    println!(&quot;{:?}&quot;, second); // prints &quot;2&quot;
+}</code></pre>
+<p>Ultimately, constructing and destructuring is about creating objects that store data and techniques for extracting that data into other usable forms.</p>
+<h2 id="function-composition">Function Composition</h2>
+<p>A function composition is the act of composing two or more functions. From a mathematical perspective, the common syntax for the functional composition of <code>f(x)</code> and <code>g(x)</code> is <code>f(g(x))</code> and <code>f . g (x)</code>. From an information flow perspective, the data <code>x</code> is inputted to function <code>g</code> and the output is inputted to function <code>f</code>. This allows various chaining of operations.</p>
+<p>The following Haskell code demonstrates this concept using the <code>.</code> operator for function composition:</p>
+<pre><code>-- function_composition.hs
+
+add_one :: Int -&gt; Int
+add_one x = x + 1
+
+make_negative :: Int -&gt; Int
+make_negative x = -x
+
+main = do
+
+   let f1 = make_negative . add_one
+   putStrLn $ show $ f1 0 -- prints &quot;-1&quot;
+
+   let f2 = make_negative . add_one . add_one
+   putStrLn $ show $ f2 0 -- prints &quot;-2&quot;
+</code></pre>
+<p>It is important to note from the example that operations of the function composition execute from right to left. This is analogous to the inner function being evaluated before the outer function.</p>
+<p>The ability to chain functions together leads to easier development of pipeline design patterns. Moreover, it promotes modularity and code-reusability because functions are easily interchangeable.</p>
+<h2 id="first-class-functions-lambdas">First-Class Functions &amp; Lambdas</h2>
+<h3 id="first-class-functions">First Class Functions</h3>
+<p>A language supports first-class functions if it allows functions: 1. to be passed as arguments to other functions 2. to be returned as values from other functions 3. to be assigned to variables</p>
+<p>This is closely related to higher-order functions and function composition, because a language must support first-class functions if it intends to support either of these concepts.</p>
+<p>According to <a href="https://en.wikipedia.org/wiki/First-class_function#Language_support">wikipedia</a>, the most popular languages provide some degree of first-class functions.</p>
+<p>Haskell supports first-class functions and can demonstrate all 3 requirements:</p>
+<pre><code>-- first_class_function.hs
+
+add_one :: Int -&gt; Int
+add_one x = x + 1
+
+do_nothing :: Int -&gt; Int
+do_nothing x = x
+
+execute_if_even :: (Int -&gt; Int) -&gt; Int -&gt; Int         
+execute_if_even func x = if even x then func x else do_nothing x  
+
+main = do
+
+   let list = [1, 2, 3, 4]
+
+   let add_one_if_even = execute_if_even add_one
+
+   let new_list = filter even list
+
+   putStrLn $ show $ new_list -- prints &quot;[1, 3, 3, 5]&quot;</code></pre>
+<p>We can see that:</p>
+<ol type="1">
+<li>The function <code>add_one_if_even</code> is an argument to the function <code>map</code>.</li>
+<li>The function <code>execute_if_even</code> returns a function.</li>
+<li>The function returned by <code>execute_if_even add_one</code> is stored in the variable <code>add_one_if_even</code>.</li>
+</ol>
+<p>Furthermore, here is a similar example in Python that exhibits the 3 requirements:</p>
+<pre><code># first_class_function.py
+
+def add_one(x):
+    return x + 1
+
+def do_nothing(x):
+    return x
+
+def execute_if_even(func, x):
+    if x % 2 == 0:
+        return func   
+    else:
+        return do_nothing   
+
+if __name__ == '__main__':
+
+    list = [1, 2, 3, 4]
+
+    new_list = []
+    for number in list:
+        function = execute_if_even(add_one, number)
+        new_list.append(function(number))    
+
+    print(new_list) # prints &quot;[1, 3, 3, 5]&quot;</code></pre>
+<h3 id="lambdas">Lambdas</h3>
+<p>A lambda function is also known as an anonymous function because they don’t require a name. In Haskell, for example:</p>
+<pre><code>\x -&gt; x + 1</code></pre>
+<p>The syntax for is as follows:</p>
+<ul>
+<li>Everything between the “<code>\</code>” and “<code>-&gt;</code>” will be parameters</li>
+<li>The function body is to the right of “<code>-&gt;</code>”</li>
+</ul>
+<p>There can be multiple parameters:</p>
+<pre><code>\x y z -&gt; x + y + z</code></pre>
+<p>Arguments can be applied as such:</p>
+<pre><code>&gt; (\x y z -&gt; x + y + z) 1 2 3
+6</code></pre>
+<p>Lambdas allow closures and currying to be developed, which will be discussed in later blog posts.</p>
+<p>A named function can be used anywhere a lambda function is used, however, sometimes it’s convenient to use a lambda function, especially when the function is small. Here is our <code>map</code> example again, except using an anonymous function as opposed to defining an incrementing function:</p>
+<pre><code>-- anonymous.hs
+   
+main = do
+    let list = [1, 2, 3]
+    let new_list = map (\x -&gt; x + 1) list
+    
+    putStrLn $ show list -- prints &quot;[1, 2, 3]&quot;
+    putStrLn $ show new_list -- prints &quot;[2, 3, 4]&quot;</code></pre>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>
