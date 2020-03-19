@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+    <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144233581-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-144233581-1');
+        </script>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SENOFSKY - 2019-09-20-usb</title>
+        <link rel="stylesheet" href="../css/default.css" />
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">SENOFSKY</a>
+            </div>
+            <nav>
+                <a href="../">ABOUT</a>
+                <a href="../resume.pdf">RESUME</a>
+                <a href="../archive.html">ARCHIVE</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>2019-09-20-usb</h1>
+            <article>
+    <section class="header">
+        Posted on September 20, 2019
+        
+    </section>
+    <section>
+        <p>I recently attempted to create a kernel module on Ubuntu 18.04 Linux kernel 4.15.0-64-generic that would execute a function anytime a USB was plugged into the computer. The following post is about my experience with this as well as my thought process.</p>
+<p>To accomplish this, I created the following USB Driver:</p>
+<pre><code>static struct usb_driver usb_detector_driver = {
+    .owner = THIS_MODULE,
+    .name = &quot;usb_detector&quot;,
+    .id_table = usb_detector_id_table,
+    .probe = usb_detector_probe,
+    .disconnect = usb_detector_disconnect,};</code></pre>
+<p>Where the id_table contains data that the ?usb subsystem? uses to match against connected devices and probe is a function that gets call anytime a match is found. The disconnect function is executed whenever the driver is removed (or unregistered?) Typically, this is where a Vendor ID or Product ID can be set or a class of devices such as HID devices. As mentioned earlier, I wanted to execute a command anytime a USB was connected. Therefore, I would want to match against all devices. According to the various pieces of documentation (linux device drives, usb hotplugging page, kernel source code), I should be able to achieve this goal with this:</p>
+<p>According to Linux Device Drivers 3rd ed.:</p>
+<pre><code>const struct usb_device_id *id_table
+Pointer to thestruct usb_device_idtable that contains a list of all of the differ-ent kinds of USB devices this driver can accept. If this variable is not set, the probe function callback in the USB driver is never called. If you want your driver always to be called for every USB device in the system, create a entry that sets only thedriver_info field:
+static struct usb_device_id usb_ids[ ] = {
+    {.driver_info = 42},
+    { }
+};</code></pre>
+<p>This seemed simple enough, however things did not go as expected.</p>
+<p>In order to test, my probe function is:</p>
+<pre><code></code></pre>
+<p>Therefore, “USB DEVICE FOUND:” will be logged to <code>/var/log/kern.log</code> anytime a USB is detected. There are my results:</p>
+<p>iPhone Samsung Flash Drive Keyboard</p>
+<p>For some reason, <code>probe</code> is not being called on some of the connections. Therefore, I have a misunderstanding of what’s going on under the hood, so I decided to investigate.</p>
+<p>TODO: investigate wtf is going on in USB subsystem</p>
+<p>I needed to determine the chain of events that occurs when a USB is physically connected to the computer. I grepped the Linux kernel using <code>grep -nr linux -e MATCH</code> which resulted in many hits, however, <code>core/driver.c</code> seemed to be a natural place to start. I started at <code>usb_match_id</code>, and started to move my way up the call chain. usb_match_id -&gt; usb_device_match, where usb_device_match is a .match function in usb_bus_type. The usb_bus_type is of type <code>struct bus_type</code> which is found in <code>include/linux/device.h</code> and states the .match field will be called anytime a new device or driver is added for the bus. The usb_bus_stype is stored in a usb_device_driver struct during a call to <code>usb_register_device_driver</code>. This leads me to discovering that usb_register_device_driver is called in core/hub.c within usb_init.</p>
+<p>first call is <code>usb_register_device_driver</code> which registers a new <code>usb_device_driver</code> with <code>driver_register</code></p>
+<p>usb_match_id sates ```usb_match_id searches an array of usb_device_id’s and returns * the first one matching the device or interface, or null. so it is possible that that another device driver is found before mine.</p>
+<p>structs encountered: device_driver usb_driver</p>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>
